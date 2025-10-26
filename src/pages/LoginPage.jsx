@@ -1,7 +1,7 @@
 import {useLocation, useNavigate, Link} from "react-router-dom";
 import {useState} from "react";
 import LoginInput from "../components/LoginInput";
-import {login, putAccessToken} from "../utils/api";
+import {getUserLogged, login, putAccessToken} from "../utils/api";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -19,7 +19,14 @@ function LoginPage() {
                 setErrMsg("Email atau password salah.");
                 return;
             }
+
             putAccessToken(data.accessToken);
+
+            const me = await getUserLogged();
+            if (!me.error) {
+                localStorage.setItem("currentUser", JSON.stringify(me.data));
+            }
+
             navigate(from, {replace: true});
         } catch (e) {
             setErrMsg("Terjadi kesalahan jaringan. Coba lagi.");
