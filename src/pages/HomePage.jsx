@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import NoteCard from "../components/NoteCard";
+import { PlusIcon } from "@heroicons/react/24/solid";
 import {
     getActiveNotes, getArchivedNotes,
     archiveNote, unarchiveNote, deleteNote
 } from "../utils/api";
+import {Link} from "react-router-dom";
+import {useSettings} from "../contexts/SettingsContext";
+import {dict} from "../utils/dict";
 
 function HomePage() {
+    const { lang } = useSettings();
+
     const [active, setActive] = useState([]);
     const [archived, setArchived] = useState([]);
     const [loadingList, setLoadingList] = useState(true);
@@ -58,7 +64,7 @@ function HomePage() {
     if (loadingList) {
         return (
             <div className="p-6">
-                <h1 className="mb-4 text-2xl font-semibold">My Notes</h1>
+                <h1 className="mb-4 text-2xl font-semibold">{dict[lang].home}</h1>
                 <div className="flex flex-wrap gap-6">
                     {Array.from({ length: 6 }).map((_, i) => (
                         <div key={i} className="min-w-[280px] w-72">
@@ -76,7 +82,7 @@ function HomePage() {
                 <div key={n.id} className="min-w-[280px] w-72">
                     <NoteCard
                         note={n}
-                        ownerName={n.owner === currentUser?.id ? "You" : ownerName}
+                        ownerName={n.owner === currentUser?.id ? dict[lang].noteCard.you : ownerName}
                         onToggleArchive={onToggleArchive}
                         onDelete={onDelete}
                         isArchiving={archivingIds.has(n.id)}
@@ -90,15 +96,28 @@ function HomePage() {
 
     return (
         <div className="p-6">
-            <h1 className="mb-4 text-2xl font-semibold">My Notes</h1>
+            <h1 className="mb-4 text-2xl font-semibold">{dict[lang].home}</h1>
             <List items={active} />
 
             {archived.length > 0 && (
                 <>
-                    <h2 className="mb-4 mt-10 text-xl font-semibold">Archived</h2>
+                    <h2 className="mb-4 mt-10 text-xl font-semibold">{dict[lang].archived}</h2>
                     <List items={archived} />
                 </>
             )}
+
+            {/* FAB */}
+            <Link
+                to="/create"
+                className="fixed bottom-6 right-6 z-50 grid h-14 w-14 place-items-center
+                 rounded-full bg-lime-500 text-black shadow-lg shadow-lime-500/30
+                 hover:bg-lime-400 focus:outline-none focus:ring-4 focus:ring-lime-400/50"
+                aria-label="Create Note"
+                title="Create Note"
+            >
+                <PlusIcon className="h-7 w-7" />
+                <span className="sr-only">Create Note</span>
+            </Link>
         </div>
     );
 }

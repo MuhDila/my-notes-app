@@ -1,5 +1,7 @@
 import PropTypes from "prop-types";
 import {StarIcon, ArchiveBoxArrowDownIcon, ArrowUturnUpIcon, TrashIcon} from "@heroicons/react/24/solid";
+import {useSettings} from "../contexts/SettingsContext";
+import {dict} from "../utils/dict";
 
 // util kecil buat clamp teks tanpa plugin line-clamp
 const clamp = (lines) => ({
@@ -21,13 +23,9 @@ function formatDate(iso) {
     }
 }
 
-function NoteCard({
-                      note,
-                      ownerName,
-                      onToggleArchive,
-                      onDelete,
-                      color = "amber",
-                  }) {
+function NoteCard({note, ownerName, onToggleArchive, onDelete, color = "amber"}) {
+    const { lang } = useSettings();
+
     const bg = color === "orange" ? "bg-orange-300/90" : "bg-amber-300/90";
 
     return (
@@ -57,7 +55,7 @@ function NoteCard({
                         type="button"
                         onClick={() => onToggleArchive(note.id, note.archived)}
                         className="grid h-9 w-9 place-items-center rounded-full bg-black/70 text-white hover:bg-black focus:outline-none focus:ring-2 focus:ring-black/40"
-                        title={note.archived ? "Unarchive" : "Archive"}
+                        title={note.archived ? dict[lang].noteCard.unarchive : dict[lang].noteCard.archive }
                         aria-label={note.archived ? "Unarchive note" : "Archive note"}
                     >
                         {note.archived ? (
@@ -72,7 +70,7 @@ function NoteCard({
                         type="button"
                         onClick={() => onDelete(note.id)}
                         className="grid h-9 w-9 place-items-center rounded-full bg-red-600 text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-400"
-                        title="Delete"
+                        title={dict[lang].noteCard.delete}
                         aria-label="Delete note"
                     >
                         <TrashIcon className="h-5 w-5" />
