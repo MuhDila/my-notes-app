@@ -23,13 +23,30 @@ function formatDate(iso) {
     }
 }
 
-function NoteCard({note, ownerName, onToggleArchive, onDelete, color = "amber"}) {
+function NoteCard({note, ownerName, onToggleArchive, onDelete, onOpen, color = "amber"}) {
     const { lang } = useSettings();
 
     const bg = color === "orange" ? "bg-orange-300/90" : "bg-amber-300/90";
 
+    const handleKey = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onOpen?.(note.id);
+        }
+    };
+
     return (
-        <div className={`relative rounded-2xl ${bg} p-4 shadow-sm text-neutral-900 w-72`}>
+        <div
+            className={`relative rounded-2xl ${bg} p-4 text-neutral-900 w-72
+              cursor-pointer transition
+              ring-1 ring-black/5 dark:ring-white/10
+              hover:shadow-md hover:ring-black/15
+              dark:hover:ring-white/25`}
+            onClick={() => onOpen?.(note.id)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={handleKey}
+        >
             {note.archived && (
                 <StarIcon className="absolute right-3 top-3 h-5 w-5 text-amber-700" />
             )}
@@ -94,6 +111,7 @@ NoteCard.propTypes = {
     onToggleArchive: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
     color: PropTypes.oneOf(["amber", "orange"]),
+    onOpen: PropTypes.func,
 };
 
 export default NoteCard;

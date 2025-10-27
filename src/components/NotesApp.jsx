@@ -6,6 +6,8 @@ import AuthGate from "../contexts/AuthGate";
 import PrivateLayout from "./PrivateLayout";
 import {dict} from "../utils/dict";
 import {useSettings} from "../contexts/SettingsContext";
+import CreatePage from "../pages/CreatePage";
+import DetailPage from "../pages/DetailPage";
 
 function NotesApp() {
     const { lang } = useSettings();
@@ -21,10 +23,20 @@ function NotesApp() {
                 }
             />
             <Route
-                path="/"
+                path="/create"
                 element={
                     <AuthGate require="auth">
-                        <PrivateLayout title="Home"><HomePage /></PrivateLayout>
+                        <PrivateLayout title={dict[lang].create}><CreatePage /></PrivateLayout>
+                    </AuthGate>
+                }
+            />
+            <Route
+                path="/detail/:id"
+                element={
+                    <AuthGate require="auth">
+                        <PrivateLayout title={"Detail"}>
+                            <DetailPage />
+                        </PrivateLayout>
                     </AuthGate>
                 }
             />

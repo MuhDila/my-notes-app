@@ -5,12 +5,16 @@ import {
     getActiveNotes, getArchivedNotes,
     archiveNote, unarchiveNote, deleteNote
 } from "../utils/api";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useSettings} from "../contexts/SettingsContext";
 import {dict} from "../utils/dict";
 
 function HomePage() {
+    const navigate = useNavigate();
     const { lang } = useSettings();
+
+    // go to detail
+    const openDetail = (id) => navigate(`/detail/${id}`);
 
     const [active, setActive] = useState([]);
     const [archived, setArchived] = useState([]);
@@ -88,6 +92,7 @@ function HomePage() {
                         isArchiving={archivingIds.has(n.id)}
                         isDeleting={deletingIds.has(n.id)}
                         color={i % 2 ? "orange" : "amber"}
+                        onOpen={openDetail}
                     />
                 </div>
             ))}
