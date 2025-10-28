@@ -4,6 +4,10 @@ export const dict = {
         homeTitle: "Home",
         archived: "Archived",
         create: "Create Note",
+        empty: {
+            title: "No notes yet",
+            desc: "Create your first note using the button below.",
+        },
         noteCard: {
             you: "You",
             archive: "Archive",
@@ -24,6 +28,10 @@ export const dict = {
         homeTitle: "Beranda",
         archived: "Terarsip",
         create: "Buat Catatan",
+        empty: {
+            title: "Belum ada catatan",
+            desc: "Mulai catatan pertamamu dengan tombol di bawah.",
+        },
         noteCard: {
             you: "Anda",
             archive: "Arsip",
